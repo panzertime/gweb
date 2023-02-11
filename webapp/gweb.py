@@ -14,6 +14,10 @@ bp = Blueprint("gweb", __name__)
 def index():
     return redirect("static/index.html", 303)
 
+# same here:
+@bp.route("/instrument")
+def instrument():
+    return redirect("static/instrument.html", 303)
 
 @bp.route("/pods")
 def get_pods():
@@ -27,6 +31,7 @@ def get_pods():
     for row in res:
         pods[row["id"]] = {"title" : row["title"], "cover_url" : row["cover_url"]} 
     return jsonify(pods)
+
 
 @bp.route("/episode_count")
 def get_episode_counts():
@@ -44,6 +49,7 @@ def get_episode_counts():
     for row in res:
         pods[row["podcast_id"]] = row["COUNT(podcast_id)"]
     return jsonify(pods) 
+
 
 @bp.route("/get_episodes")
 def get_episodes():
@@ -78,7 +84,7 @@ def get_episodes():
 def queue_episode():
     index = request.args.get("id", default=-1, type=int)
     # in the DB the lowest index is 1. If nothing or bogon
-    # is supplied then we shoudl Malformed Request this one
+    # is supplied then we should Malformed Request this one
     if index < 1:
         return 400;
     db = get_db()
