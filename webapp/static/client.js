@@ -57,7 +57,7 @@ $(document).on("click", "#play", function (e) {
 	xhttp.overrideMimeType("text/text");
 	xhttp.onload = function () {
 		var res = xhttp.responseText;
-		media = { title: model["title"], mp3: res }
+		media = { title: model["selected"]["title"], mp3: res }
 		$("#jquery_jplayer_1").jPlayer("setMedia", media);
 	}
 	const ep = model["selected"]["episode"];
