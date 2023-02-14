@@ -9,15 +9,11 @@ from webapp.db import get_db
 
 bp = Blueprint("gweb", __name__)
 
-# Later, nginx will serve the SPA and this route can get dumped
-@bp.route("/")
-def index():
-    return redirect("static/index.html", 303)
-
-# same here:
-@bp.route("/instrument")
-def instrument():
-    return redirect("static/instrument.html", 303)
+# Leaving this in as bad practice. Maybe I will use it while debugging later
+# The proxy is supposed to serve this
+#@bp.route("/")
+#def index():
+#    return redirect("static/index.html", 303)
 
 @bp.route("/pods")
 def get_pods():

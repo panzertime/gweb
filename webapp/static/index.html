@@ -1,9 +1,111 @@
 <head>
-	<script src="client.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script type="text/javascript" src="jquery.jplayer.min.js"></script>
+	<script type="text/javascript" src="client.js"></script>
+
+	<link type="text/css" href="blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#jquery_jplayer_1").jPlayer({
+				ready: undefined,
+				cssSelectorAncestor: "#jp_container_1",
+				swfPath: "/js",
+				supplied: "mp3",
+				useStateClassSkin: true,
+				autoBlur: false,
+				smoothPlayBar: true,
+				keyEnabled: true,
+				remainingDuration: true,
+				toggleDuration: true
+			});
+		});
+	</script>
 </head>
 
 <body>
-	<div id="splash">
-		<h1>Loading...</h1>
+	<div class="container grid gap-0 row-gap-3" id="gadgets-wrapper">
+		<div class="row">
+			<h1>gWeb instruments</h1>
+		</div>
+		<div class="row">
+			<div class="col-8">
+				<select class="form-select" id="pod-selector">
+					<option selected>Pick a show</option>
+				</select>
+				<select class="form-select" id="page-selector" disabled>
+					<option selected>Pick a page</option>
+				</select>
+				<select class="form-select" id="episode-page" disabled>
+					<option selected>Pick an episode</option>
+				</select>
+			</div>
+			<div class="col-4">
+				<div id="pod-cover">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4">
+				<h3 id="ep-title">
+					</h2>
+					<h3 id="ep-date">
+						</h2>
+			</div>
+			<div class="col-8">
+				<p id="ep-desc"></p>
+			</div>
+		</div>
+		<div class="row">
+			<button id="play" class="btn btn-primary" disabled>Play episode</button>
+		</div>
 	</div>
+
+
+	<div class="container">
+		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+		<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+			<div class="jp-type-single">
+				<div class="jp-gui jp-interface">
+					<div class="jp-volume-controls">
+						<button class="jp-mute" role="button" tabindex="0">mute</button>
+						<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+						<div class="jp-volume-bar">
+							<div class="jp-volume-bar-value"></div>
+						</div>
+					</div>
+					<div class="jp-controls-holder">
+						<div class="jp-controls">
+							<button class="jp-play" role="button" tabindex="0">play</button>
+							<button class="jp-stop" role="button" tabindex="0">stop</button>
+						</div>
+						<div class="jp-progress">
+							<div class="jp-seek-bar">
+								<div class="jp-play-bar"></div>
+							</div>
+						</div>
+						<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+						<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+						<div class="jp-toggles">
+							<button class="jp-repeat" role="button" tabindex="0">repeat</button>
+						</div>
+					</div>
+				</div>
+				<div class="jp-details">
+					<div class="jp-title" aria-label="title">&nbsp;</div>
+				</div>
+				<div class="jp-no-solution">
+					<span>Update Required</span>
+					To play the media you will need to either update your browser to a recent version or update your
+					<a href="https://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
