@@ -24,9 +24,8 @@ $(document).on("change", "#page-selector", function (e) {
 		var res = JSON.parse(xhttp.responseText);
 		model["curr_page"] = res;
 		for (episode in res) {
-
-			name = res[episode]["title"];
-			line = '<option value="' + episode + '">' + name + '</option>';
+			ep_name = res[episode]["title"];
+			line = '<option value="' + episode + '">' + ep_name + '</option>';
 			$("#episode-page").append(line);
 		}
 	}
@@ -48,6 +47,7 @@ $(document).on("change", "#episode-page", function (e) {
 
 	$("#ep-title").html(title);
 	$("#ep-date").html(date);
+	$("#desc-block").height($("#title-block").height());
 	$("#ep-desc").html(desc);
 	$("#play").prop("disabled", false);
 });
@@ -57,8 +57,18 @@ $(document).on("click", "#play", function (e) {
 	xhttp.overrideMimeType("text/text");
 	xhttp.onload = function () {
 		var res = xhttp.responseText;
-		media = { title: model["selected"]["title"], mp3: res }
+		media = { 
+			title: model["selected"]["title"], 
+			mp3: res, 
+			poster:  model["pods"][model["selected"]["podcast"]]["cover_url"]
+		}
 		$("#jquery_jplayer_1").jPlayer("setMedia", media);
+		dimension = $("#jp_container_1").height();
+		$("#jquery_jplayer_1").jPlayer("option", 
+			"size", {
+				width: dimension,
+				height: dimension
+		});
 	}
 	const ep = model["selected"]["episode"];
 	xhttp.open("GET", "../queue_episode?id=" + ep, true);
@@ -72,8 +82,8 @@ $(document).ready(function () {
 		var res = JSON.parse(xhttp.responseText);
 		model["pods"] = res;
 		for (pod in res) {
-			name = res[pod].title;
-			line = '<option value="' + pod + '">' + name + '</option>';
+			pod_name = res[pod].title;
+			line = '<option value="' + pod + '">' + pod_name + '</option>';
 			$("#pod-selector").append(line);
 		}
 	}

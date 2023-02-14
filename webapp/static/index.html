@@ -25,6 +25,7 @@
 					keyEnabled: true,
 					remainingDuration: true,
 					toggleDuration: true
+					
 				});
 			});
 		</script>
@@ -37,7 +38,7 @@
 					<h1>gWeb episode player</h1>
 				</div>
 				<div class="row border border-secondary mb-3">
-					<div class="col-8 border-end border-secondary-subtle">
+					<div class="col-md-8 col-sm border-end border-secondary-subtle">
 						<select class="form-select mb-1 mt-1" id="pod-selector">
 							<option selected>Pick a show</option>
 						</select>
@@ -48,28 +49,27 @@
 							<option selected>Pick an episode</option>
 						</select>
 					</div>
-					<div class="d-flex col-4 justify-content-center mh-25">
+					<div class="d-flex col-md-4 col-sm justify-content-center mh-25">
 						<div id="pod-cover">
 							<i>No pod selected yet</i>
 						</div>
 					</div>
 				</div>
 				<div class="row border border-secondary">
-					<div class="col-4 border-end border-secondary-subtle">
+					<div id="title-block" class="col-4 border-end border-secondary-subtle">
 						<h3 id="ep-title"></h3>
-						<h3 id="ep-date"></h3>
+						<p id="ep-date"></p>
 					</div>
-					<div style="height: 100px" class="col-8 overflow-auto">
+					<div id="desc-block" style="height: 100px" class="col-8 overflow-auto">
 						<p id="ep-desc"><i>No pod selected yet</i></p>
 					</div>
 				</div>
 				<div class="row p-3">
 					<button id="play" class="btn btn-primary" disabled>Play episode</button>
 				</div>
-			</div>
+			</div>	
 	
-	
-			<div class="container border border-primary d-flex justify-content-center p-3">
+			<div id="player-box" class="container border border-primary d-flex justify-content-center p-3">
 				<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 				<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
 					<div class="jp-type-single">
@@ -110,7 +110,5 @@
 				</div>
 			</div>
 		</div>
-		
-
 	</body>
 </html>
