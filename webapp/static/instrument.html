@@ -24,6 +24,9 @@
   </script>
 
 	<script type="text/javascript">
+		var model = {"pods" : {}, "queued" : "", "pages" : {}};
+
+
 		$(document).on("click", "#queue", function(e) {
 			const xhttp = new XMLHttpRequest();
 			xhttp.overrideMimeType("text/text");
@@ -38,17 +41,57 @@
 			xhttp.open("GET", "../queue_episode?id=" + ep, true);
 			xhttp.send();
 		});
+
+
+                $(document).on("change", "#pod-selector", function(e) {
+			sel = $("#pod-selector").find(':selected').val();
+			url = model["pods"][sel]["cover_url"];
+			doc = '<img src="' + url + '" class="img-fluid">';
+			$("#pod-cover").html(doc);
+		});
+
+
+		$(document).ready(function(){
+			const xhttp = new XMLHttpRequest();
+			xhttp.overrideMimeType("application/json");
+			xhttp.onload = function() {
+				var res = JSON.parse(xhttp.responseText);
+				model["pods"] = res;
+				for (pod in res) {
+					name = res[pod].title;
+					line = '<option value="' + pod + '">' + name + '</option>';
+					$("#pod-selector").append(line);
+				}
+			}
+			xhttp.open("GET", "../pods", true);
+			xhttp.send();
+		});
 	</script>
+				
 </head>
 
 <body>
-	<div class="container" id="form-wrapper">
-	 <h1>gWeb instruments</h1>
-	   <div class="form-group">
-		 <label for="queueEpisode">Queue episode number</label>
-		 <input class="form-control" id="queueEpisode">
-	   </div>
-	   <button id="queue" class="btn btn-primary">Queue</button>
+	<div class="container grid gap-0 row-gap-3" id="gadgets-wrapper">
+ 		<div class="row">
+		 <h1>gWeb instruments</h1>
+		</div>
+		<div class="row">
+	  	 <div class="form-group">
+			 <label for="queueEpisode">Queue episode number</label>
+			 <input class="form-control" id="queueEpisode">
+	   	 </div>
+	   	 <button id="queue" class="btn btn-primary">Queue</button>
+		</div>
+		<div class="row">
+		  <div class="col-8">
+	   		<select class="form-select" id="pod-selector">
+				<option selected>Pick a show</option>
+	   		</select>
+		</div>
+		<div class="col-4">
+	   	 <div id="pod-cover">
+	   	 </div>
+		</div>
 	</div>
 
 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
