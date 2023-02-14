@@ -57,7 +57,8 @@ def get_episodes():
     res = db.execute(
             "SELECT id, title, published, description_html"
             " FROM episode"
-            " WHERE podcast_id=?",
+            " WHERE podcast_id=?"
+            " ORDER BY published DESC",
             (request.args.get("podcast", default=1),)
     ).fetchall()
     
