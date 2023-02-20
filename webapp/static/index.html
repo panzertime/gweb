@@ -15,7 +15,17 @@
 		<script type="text/javascript">
 			$(document).ready(function () {
 				$("#jquery_jplayer_1").jPlayer({
-					ready: undefined,
+					loadstart: function(e){
+						if ('mediaSession' in navigator) {
+							navigator.mediaSession.metadata = new MediaMetadata({
+								title: e.jPlayer.status.media.title,
+								artist: model["pods"][model["selected"]["podcast"]]["title"],
+								artwork: [
+									{src: e.jPlayer.status.media.poster}
+								]
+							})
+						};
+					},
 					cssSelectorAncestor: "#jp_container_1",
 					swfPath: "/js",
 					supplied: "mp3",
