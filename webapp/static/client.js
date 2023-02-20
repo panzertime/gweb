@@ -94,7 +94,7 @@ $(document).on("change", "#page-selector", function (e) {
 		{
 			podcast: model.selected.podcast, 
 			page: $("#page-selector").find(':selected').val()
-		});
+	});
 
 	$("#episode-selector").prop("disabled", false);
 });
