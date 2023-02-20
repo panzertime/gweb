@@ -77,18 +77,18 @@ $(document).on("change", "#pod-selector", function (e) {
 		$("#page-selector").append(line);
 	}
 	$("#page-selector").prop("disabled", false);
-	$("#episode-page").prop("disabled", true);
+	$("#episode-selector").prop("disabled", true);
 });
 
 $(document).on("change", "#page-selector", function (e) {
-	$("#episode-page").empty().append("<option selected>Pick an episode</option>");
+	$("#episode-selector").empty().append("<option selected>Pick an episode</option>");
 
 	sync_state("get_episodes", function(res){
 			model.page_data = res;
 			for (episode in res) {
 				ep_name = res[episode].title;
 				line = '<option value="' + episode + '">' + ep_name + '</option>';
-				$("#episode-page").append(line);
+				$("#episode-selector").append(line);
 			}
 		}, 
 		{
@@ -96,11 +96,11 @@ $(document).on("change", "#page-selector", function (e) {
 			page: $("#page-selector").find(':selected').val()
 		});
 
-	$("#episode-page").prop("disabled", false);
+	$("#episode-selector").prop("disabled", false);
 });
 
-$(document).on("change", "#episode-page", function (e) {
-	sel_ep = $("#episode-page").find(':selected').val();
+$(document).on("change", "#episode-selector", function (e) {
+	sel_ep = $("#episode-selector").find(':selected').val();
 
 	episode = model.page_data[sel_ep];
 	model.selected.episode = episode.id;
