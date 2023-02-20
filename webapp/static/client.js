@@ -127,7 +127,16 @@ $(document).ready(function () {
 			line = '<option value="' + pod + '">' + pod_name + '</option>';
 			$("#pod-selector").append(line);
 		}
-	})
+	});
+
+	sync_state("status", function(res){
+		console.log(res);
+		if (res.updating) {
+			lines =	'<h1 class="display-6 text-danger"><strong>U</strong></h1>'
+			console.log(lines);
+			$("#status-light").html(lines);
+		}
+	});
 
 	sync_state("episode_count", function(res) {
 		model["pages"] = {};

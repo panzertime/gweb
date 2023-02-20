@@ -5,6 +5,8 @@ from flask import jsonify
 from flask import request
 from flask import current_app
 
+from os.path import exists as path_exists
+
 from webapp.db import get_db
 
 bp = Blueprint("gweb", __name__)
@@ -97,5 +99,12 @@ def queue_episode():
     url = "/".join([current_app.config["GPO_BASE"], res["download_folder"], res["download_filename"]])
     return url
 
-
+@bp.route("/status")
+def status():
+    res = dict()
+    # Expecting the lockfile to be stored in the directory above gweb,
+    # but we're expecting the server to be executed from gweb? 
+    # Sort this out. Maybe set a working directory in the run scripts
+    res["updating"] = path_exists("../updating.lock")
+    return jsonify(res)
 
