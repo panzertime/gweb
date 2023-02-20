@@ -42,6 +42,20 @@ function player_setup() {
 	});
 }
 
+function player_media(title, url, poster){
+	$("#jquery_jplayer_1").jPlayer("setMedia", {
+			title: title,
+			mp3: url,
+			poster: poster
+		});
+	dimension = $("#jp_container_1").height();
+		$("#jquery_jplayer_1").jPlayer("option", 
+			"size", {
+				width: dimension,
+				height: dimension
+		});
+}
+
 function sync_state(method="", callback=function(r){}, params, isText=false,){
 	url = "../" + method;
 	if (params) {
@@ -115,20 +129,9 @@ $(document).on("change", "#episode-selector", function (e) {
 
 $(document).on("click", "#play", function (e) {
 	sync_state("queue_episode", function(res){
-			media = { 
-				title: model["selected"]["title"], 
-				mp3: res, 
-				poster:  model["pods"][model["selected"]["podcast"]]["cover_url"]
-			}
-			$("#jquery_jplayer_1").jPlayer("setMedia", media);
-			dimension = $("#jp_container_1").height();
-			$("#jquery_jplayer_1").jPlayer("option", 
-				"size", {
-					width: dimension,
-					height: dimension
-			});
+			player_media(model.selected.title, res, model.selected.poster);
 		}, 
-		params = {id: model["selected"]["episode"]},
+		params = {id: model.selected.episode},
 		isText=true);
 })
 
@@ -137,7 +140,7 @@ $(document).ready(function () {
 	player_setup();
 
 	sync_state("pods", function(res){
-		model["pods"] = res;
+		model.pods = res;
 		for (pod in res) {
 			pod_name = res[pod].title;
 			line = '<option value="' + pod + '">' + pod_name + '</option>';
@@ -154,9 +157,9 @@ $(document).ready(function () {
 	});
 
 	sync_state("episode_count", function(res) {
-		model["pages"] = {};
+		model.pages = {};
 		for (pod in res) {
-			model["pages"][pod] = Math.ceil(res[pod] / 25);
+			model.pages[pod] = Math.ceil(res[pod] / 25);
 		}
 	});
 	
