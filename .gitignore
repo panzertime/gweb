@@ -3,3 +3,4 @@
 *pycache*
 .venv
 *.bak
+utils/release-staging/*.zip
