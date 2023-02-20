@@ -1,17 +1,33 @@
-var model = { "pods": {}, "queued": "", "pages": {}, "selected": {}, "curr_page": {} };
+var model = { 
+	pods: {
+		"1": {
+			cover_url: "",
+			title: ""
+		}
+	}, 
+	queued: "",
+	pages: {},
+	selected: {
+		podcast: "",
+		pod_title: "",
+		episode: "",
+		title: "",
+		poster: "",
+	},
+	page_data: {} 
+};
 
 function player_setup() {
 	$("#jquery_jplayer_1").jPlayer({
-		loadstart: function(e){
+		loadstart: function(e) {
 			if ('mediaSession' in navigator) {
-				navigator.mediaSession.metadata = new MediaMetadata({
-					title: e.jPlayer.status.media.title,
-					artist: model["pods"][model["selected"]["podcast"]]["title"],
-					artwork: [
-						{src: e.jPlayer.status.media.poster}
-					]
-				})
-			};
+			navigator.mediaSession.metadata = new MediaMetadata({
+				title: model.selected.title,
+				artist: model.selected.pod_title,
+				artwork: [
+					{src: model.selected.poster}
+				]
+			})}
 		},
 		cssSelectorAncestor: "#jp_container_1",
 		swfPath: "/js",
@@ -49,32 +65,34 @@ function sync_state(method="", callback=function(r){}, params, isText=false,){
 
 $(document).on("change", "#pod-selector", function (e) {
 	sel = $("#pod-selector").find(':selected').val();
-	model["selected"]["podcast"] = sel;
-	url = model["pods"][sel]["cover_url"];
-	doc = '<img src="' + url + '" class="img-fluid">';
+	model.selected.podcast = sel;
+	model.selected.pod_title = model.pods[sel].title;
+	model.selected.poster = model.pods[sel].cover_url;
+	doc = '<img src="' + model.selected.poster + '" class="img-fluid">';
 	$("#pod-cover").html(doc);
 
 	$("#page-selector").empty().append("<option selected>Pick a page</option>");
-	for (let page = 1; page <= model["pages"][sel]; page++) {
+	for (let page = 1; page <= model.pages[sel]; page++) {
 		line = '<option value="' + page + '"> Page ' + page + '</option>';
 		$("#page-selector").append(line);
 	}
 	$("#page-selector").prop("disabled", false);
+	$("#episode-page").prop("disabled", true);
 });
 
 $(document).on("change", "#page-selector", function (e) {
 	$("#episode-page").empty().append("<option selected>Pick an episode</option>");
 
 	sync_state("get_episodes", function(res){
-			model["curr_page"] = res;
+			model.page_data = res;
 			for (episode in res) {
-				ep_name = res[episode]["title"];
+				ep_name = res[episode].title;
 				line = '<option value="' + episode + '">' + ep_name + '</option>';
 				$("#episode-page").append(line);
 			}
 		}, 
 		{
-			podcast: model["selected"]["podcast"],
+			podcast: model.selected.podcast, 
 			page: $("#page-selector").find(':selected').val()
 		});
 
@@ -83,17 +101,15 @@ $(document).on("change", "#page-selector", function (e) {
 
 $(document).on("change", "#episode-page", function (e) {
 	sel_ep = $("#episode-page").find(':selected').val();
-	episode = model["curr_page"][sel_ep];
-	model["selected"]["episode"] = episode["id"];
-	model["selected"]["title"] = episode["title"];
-	desc = episode["description"];
-	date = new Date(episode["published"] * 1000).toLocaleString();
-	title = episode["title"];
 
-	$("#ep-title").html(title);
-	$("#ep-date").html(date);
+	episode = model.page_data[sel_ep];
+	model.selected.episode = episode.id;
+	model.selected.title = episode.title;
+
+	$("#ep-title").html(episode.title);
+	$("#ep-date").html(new Date(episode.published * 1000).toLocaleDateString());
 	$("#desc-block").height($("#title-block").height());
-	$("#ep-desc").html(desc);
+	$("#ep-desc").html(episode.description);
 	$("#play").prop("disabled", false);
 });
 
@@ -130,7 +146,6 @@ $(document).ready(function () {
 	});
 
 	sync_state("status", function(res){
-		console.log(res);
 		if (res.updating) {
 			lines =	'<h1 class="display-6 text-danger"><strong>U</strong></h1>'
 			console.log(lines);
