@@ -1,3 +1,6 @@
+// Copyright 2023 panzertime 
+// Published under MPL-2.0 license: http://mozilla.org/MPL/2.0/
+
 var model = { 
 	pods: {
 		"1": {
