@@ -17,20 +17,44 @@ var model = {
 		title: "",
 		poster: "",
 	},
-	page_data: {} 
+	page_data: {},
+	timer: -1,
 };
+
+async function reconstitute() {
+	if (localStorage.length === 2) {
+		selected = JSON.parse(localStorage.getItem('selected'));
+		current_time = localStorage.getItem('current_time');
+
+		sync_state("queue_episode", function(res){
+			player_media(selected.title, res, selected.poster);
+			}, 
+			params = {id: selected.episode},
+			isText=true);
+		
+		// Javascript is bullshit and I don't mind memorializing that sentiment:
+		await new Promise(r => setTimeout(r, 750));
+
+		$("#jquery_jplayer_1").jPlayer("playHead", current_time);
+
+	}
+}
 
 function player_setup() {
 	$("#jquery_jplayer_1").jPlayer({
 		loadstart: function(e) {
 			if ('mediaSession' in navigator) {
-			navigator.mediaSession.metadata = new MediaMetadata({
-				title: model.selected.title,
-				artist: model.selected.pod_title,
-				artwork: [
-					{src: model.selected.poster}
-				]
+				navigator.mediaSession.metadata = new MediaMetadata({
+					title: model.selected.title,
+					artist: model.selected.pod_title,
+					artwork: [
+						{src: model.selected.poster}
+					]
 			})}
+		},
+		timeupdate: function(e) {
+			console.log(e.jPlayer.status.currentPercentAbsolute)
+			localStorage.setItem("current_time", e.jPlayer.status.currentPercentAbsolute);
 		},
 		cssSelectorAncestor: "#jp_container_1",
 		swfPath: "/js",
@@ -131,6 +155,7 @@ $(document).on("change", "#episode-selector", function (e) {
 });
 
 $(document).on("click", "#play", function (e) {
+	localStorage.setItem("selected", JSON.stringify(model.selected));
 	sync_state("queue_episode", function(res){
 			player_media(model.selected.title, res, model.selected.poster);
 		}, 
@@ -166,4 +191,7 @@ $(document).ready(function () {
 		}
 	});
 	
+	reconstitute();
+
+
 });
