@@ -11,6 +11,14 @@ from webapp.db import get_db
 
 bp = Blueprint("gweb", __name__)
 
+#######################################
+# Copyright 2023 panzertime 
+# Published under MPL-2.0 license: 
+#   http://mozilla.org/MPL/2.0/
+#######################################
+
+
+
 # Leaving this in as bad practice. Maybe I will use it while debugging later
 # The proxy is supposed to serve this
 #@bp.route("/")
