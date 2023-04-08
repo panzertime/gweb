@@ -21,25 +21,6 @@ var model = {
 	timer: -1,
 };
 
-async function reconstitute() {
-	if (localStorage.length === 2) {
-		selected = JSON.parse(localStorage.getItem('selected'));
-		current_time = localStorage.getItem('current_time');
-
-		sync_state("queue_episode", function(res){
-			player_media(selected.title, res, selected.poster);
-			}, 
-			params = {id: selected.episode},
-			isText=true);
-		
-		// Javascript is bullshit and I don't mind memorializing that sentiment:
-		await new Promise(r => setTimeout(r, 750));
-
-		$("#jquery_jplayer_1").jPlayer("playHead", current_time);
-
-	}
-}
-
 function player_setup() {
 	$("#jquery_jplayer_1").jPlayer({
 		loadstart: function(e) {
@@ -52,12 +33,28 @@ function player_setup() {
 					]
 			})}
 		},
-		timeupdate: function(e) {
-			console.log(e.jPlayer.status.currentPercentAbsolute)
-			localStorage.setItem("current_time", e.jPlayer.status.currentPercentAbsolute);
+		ready: function(e) {
+			if (localStorage.length === 3) {
+				selected = JSON.parse(localStorage.getItem('selected'));
+				current_time = localStorage.getItem('current_time');
+		
+				sync_state("queue_episode", function(res){
+					player_media(selected.title, res, selected.poster);
+					}, 
+					params = {id: selected.episode},
+					isText=true);
+				setTimeout(function() {
+					$("#jquery_jplayer_1").jPlayer("playHead", current_time);
+					setTimeout(function() {
+						$("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(e) {
+							localStorage.setItem("current_time", e.jPlayer.status.currentPercentAbsolute);
+						});
+					}, 500);
+				}, 500);				
+			}
 		},
 		cssSelectorAncestor: "#jp_container_1",
-		swfPath: "/js",
+		solution: "html",
 		supplied: "mp3",
 		useStateClassSkin: true,
 		autoBlur: false,
@@ -190,8 +187,5 @@ $(document).ready(function () {
 			model.pages[pod] = Math.ceil(res[pod] / 25);
 		}
 	});
-	
-	reconstitute();
-
 
 });
